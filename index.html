@@ -3,365 +3,191 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clofovoz Music — Plataforma SaaS & Audio</title>
+  <title>Clofovoz Music — Voz, Acústica & Audio SaaS</title>
   <style>
     :root {
-      --bg-dark: #090d16;
+      --bg: #090d16;
       --card-bg: #111827;
-      --accent: #06b6d4;
-      --accent-hover: #0891b2;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --text: #f8fafc;
+      --muted: #94a3b8;
       --border: #1e293b;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    }
-
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      line-height: 1.6;
-    }
-
-    /* Navbar */
-    header {
-      border-bottom: 1px solid var(--border);
-      background-color: rgba(9, 13, 22, 0.85);
-      backdrop-filter: blur(8px);
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-
-    .nav-container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 16px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--accent);
-      letter-spacing: -0.5px;
-    }
-
-    /* Hero */
-    .hero {
-      max-width: 900px;
-      margin: 60px auto 40px auto;
-      text-align: center;
-      padding: 0 20px;
-    }
-
-    .hero h1 {
-      font-size: 2.75rem;
-      font-weight: 800;
-      margin-bottom: 16px;
-      line-height: 1.2;
-    }
-
-    .hero p {
-      color: var(--text-muted);
-      font-size: 1.15rem;
-      margin-bottom: 30px;
-    }
-
-    /* Contenedor Auth / SaaS */
-    .auth-card {
-      max-width: 440px;
-      margin: 0 auto 60px auto;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    }
-
-    .auth-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 24px;
-    }
-
-    .auth-tab-btn {
-      flex: 1;
-      padding: 10px;
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .auth-tab-btn.active {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    label {
-      display: block;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 12px;
-      background: #030712;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: #fff;
-      font-size: 0.95rem;
-      outline: none;
-    }
-
-    input:focus, select:focus {
-      border-color: var(--accent);
-    }
-
-    .submit-btn {
-      width: 100%;
-      padding: 12px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      margin-top: 8px;
-    }
-
-    .submit-btn:hover {
-      background: var(--accent-hover);
-    }
-
-    #auth-status {
-      margin-top: 14px;
-      font-size: 0.85rem;
-      text-align: center;
-      min-height: 20px;
-    }
-
-    /* Panel de usuario activo */
-    .user-info {
-      text-align: center;
-      padding: 10px 0;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 4px 12px;
-      background: rgba(16, 185, 129, 0.15);
-      color: #34d399;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      margin: 10px 0 20px 0;
-    }
-
-    .logout-btn {
-      background: #ef4444;
-      color: white;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      width: 100%;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
+    header { border-bottom: 1px solid var(--border); background: rgba(9, 13, 22, 0.9); position: sticky; top: 0; z-index: 50; }
+    .nav { max-width: 1100px; margin: 0 auto; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 1.25rem; font-weight: 800; color: #fff; }
+    .logo span { color: var(--accent); }
+    .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center; }
+    @media(max-width: 768px) { .container { grid-template-columns: 1fr; } }
+    .hero h1 { font-size: 2.4rem; font-weight: 800; line-height: 1.2; margin-bottom: 16px; }
+    .hero p { color: var(--muted); font-size: 1.05rem; margin-bottom: 24px; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+    .tab-btn { flex: 1; padding: 10px; background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; cursor: pointer; font-weight: bold; }
+    .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .form-group { margin-bottom: 14px; }
+    label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 4px; }
+    input, select { width: 100%; padding: 10px; background: #030712; border: 1px solid var(--border); border-radius: 6px; color: #fff; outline: none; }
+    input:focus, select:focus { border-color: var(--accent); }
+    .btn { width: 100%; padding: 12px; background: var(--accent); color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 6px; }
+    .btn:hover { background: var(--accent-hover); }
+    #status { margin-top: 12px; font-size: 0.85rem; text-align: center; }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="nav-container">
-      <div class="logo">CLOFOVOZ MUSIC</div>
-      <div style="font-size: 0.85rem; color: var(--text-muted);">SaaS Cloud Platform</div>
+    <div class="nav">
+      <div class="logo">CLOFOVOZ <span>MUSIC</span></div>
+      <div style="font-size: 0.85rem; color: var(--muted);">Plataforma Cloud Activa</div>
     </div>
   </header>
 
-  <main>
-    <section class="hero">
-      <h1>Plataforma Inteligente de Producción & Distribución Musical</h1>
-      <p>Gestión de audio, masterización asistida por IA y herramientas colaborativas para creadores de sonido.</p>
-    </section>
+  <main class="container">
+    <div class="hero">
+      <div style="display:inline-block; padding: 4px 12px; background: rgba(99,102,241,0.15); color: #818cf8; border-radius: 20px; font-size: 0.8rem; margin-bottom: 14px; font-weight: bold;">Ciencia Vocal & Producción de Audio</div>
+      <h1>El punto de encuentro entre la ciencia acústica y la música.</h1>
+      <p>Entrenamiento fisiológico para cantantes, consultoría de ergonomía vocal y producción de audio fundamentada en acústica de precisión.</p>
+    </div>
 
-    <!-- Caja de Acceso / Panel SaaS -->
-    <section class="auth-card">
-      <div id="auth-forms">
-        <div class="auth-tabs">
-          <button id="tab-login" class="auth-tab-btn active" onclick="switchAuthTab('login')">Ingresar</button>
-          <button id="tab-register" class="auth-tab-btn" onclick="switchAuthTab('register')">Crear Cuenta</button>
+    <!-- FORMULARIO DE ACCESO Y REGISTRO -->
+    <div class="card">
+      <div id="auth-box">
+        <div class="tabs">
+          <button id="b-login" class="tab-btn active" onclick="tab('login')">Ingresar</button>
+          <button id="b-reg" class="tab-btn" onclick="tab('reg')">Registrarse</button>
         </div>
 
-        <!-- Formulario Iniciar Sesión -->
-        <form id="form-login" onsubmit="handleLogin(event)">
+        <form id="f-login" onsubmit="doLogin(event)">
           <div class="form-group">
-            <label>Correo electrónico</label>
-            <input type="email" id="login-email" required placeholder="tu@email.com">
+            <label>Correo Electrónico</label>
+            <input type="email" id="l-email" required placeholder="admin@clofovozmusic.com">
           </div>
           <div class="form-group">
             <label>Contraseña</label>
-            <input type="password" id="login-password" required placeholder="••••••••">
+            <input type="password" id="l-pass" required placeholder="••••••••">
           </div>
-          <button type="submit" class="submit-btn">Entrar a mi estudio</button>
+          <button type="submit" class="btn">Entrar a la Plataforma</button>
         </form>
 
-        <!-- Formulario Registrarse -->
-        <form id="form-register" onsubmit="handleRegister(event)" style="display: none;">
+        <form id="f-reg" onsubmit="doReg(event)" style="display: none;">
           <div class="form-group">
-            <label>Nombre o Proyecto Musical</label>
-            <input type="text" id="reg-nombre" required placeholder="Ej. Jaime Beats">
+            <label>Nombre o Proyecto</label>
+            <input type="text" id="r-name" required placeholder="Tu nombre">
           </div>
           <div class="form-group">
-            <label>Correo electrónico</label>
-            <input type="email" id="reg-email" required placeholder="tu@email.com">
+            <label>Correo Electrónico</label>
+            <input type="email" id="r-email" required placeholder="correo@ejemplo.com">
           </div>
           <div class="form-group">
             <label>Contraseña</label>
-            <input type="password" id="reg-password" required minlength="6" placeholder="Mínimo 6 caracteres">
+            <input type="password" id="r-pass" required minlength="6" placeholder="Mínimo 6 caracteres">
           </div>
           <div class="form-group">
-            <label>Plan de Servicio</label>
-            <select id="reg-plan">
-              <option value="free">Free Creator (Funciones básicas)</option>
-              <option value="creator">Creator Studio ($12/mes)</option>
-              <option value="pro">Pro Producer ($29/mes)</option>
+            <label>Plan Inicial</label>
+            <select id="r-plan">
+              <option value="free">Plan Free (Prueba)</option>
+              <option value="creator">Plan Creator ($12/mes)</option>
+              <option value="pro">Plan Pro Studio ($29/mes)</option>
             </select>
           </div>
-          <button type="submit" class="submit-btn" style="background: #10b981;">Registrarse</button>
+          <button type="submit" class="btn" style="background:#10b981;">Crear mi Cuenta</button>
         </form>
 
-        <div id="auth-status"></div>
+        <div id="status"></div>
       </div>
 
-      <!-- Panel de Control si ya inició sesión -->
-      <div id="user-panel" style="display: none;">
-        <div class="user-info">
-          <h2>¡Bienvenido!</h2>
-          <p id="user-display-name" style="font-size: 1.1rem; font-weight: 700; margin-top: 6px;"></p>
-          <div id="user-display-plan" class="badge"></div>
-          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">Tu entorno de trabajo y base de datos en Render están sincronizados.</p>
-          <button class="logout-btn" onclick="handleLogout()">Cerrar Sesión</button>
-        </div>
+      <div id="user-box" style="display: none; text-align: center; padding: 20px 0;">
+        <h3 style="color: #818cf8; margin-bottom: 8px;">¡Sesión Iniciada!</h3>
+        <p id="u-name" style="font-size: 1.1rem; font-weight: bold;"></p>
+        <p style="color: var(--muted); font-size: 0.85rem; margin: 8px 0 20px 0;">Tu cuenta está conectada en tiempo real a PostgreSQL en Render.</p>
+        <button onclick="doLogout()" class="btn" style="background: #ef4444;">Cerrar Sesión</button>
       </div>
-    </section>
+    </div>
   </main>
 
   <script>
-    const SAAS_API = "https://clofovozmusic-ai.onrender.com";
+    const API = "https://clofovozmusic-ai.onrender.com";
 
-    function switchAuthTab(tab) {
-      const isLogin = tab === 'login';
-      document.getElementById('form-login').style.display = isLogin ? 'block' : 'none';
-      document.getElementById('form-register').style.display = isLogin ? 'none' : 'block';
-      
-      document.getElementById('tab-login').classList.toggle('active', isLogin);
-      document.getElementById('tab-register').classList.toggle('active', !isLogin);
-      
-      const statusEl = document.getElementById('auth-status');
-      statusEl.innerText = '';
+    function tab(type) {
+      const isLogin = type === 'login';
+      document.getElementById('f-login').style.display = isLogin ? 'block' : 'none';
+      document.getElementById('f-reg').style.display = isLogin ? 'none' : 'block';
+      document.getElementById('b-login').className = isLogin ? 'tab-btn active' : 'tab-btn';
+      document.getElementById('b-reg').className = !isLogin ? 'tab-btn active' : 'tab-btn';
+      document.getElementById('status').innerText = '';
     }
 
-    async function handleLogin(e) {
+    async function doLogin(e) {
       e.preventDefault();
-      const statusEl = document.getElementById('auth-status');
-      statusEl.style.color = '#38bdf8';
-      statusEl.innerText = 'Conectando con el servidor...';
-
+      const s = document.getElementById('status');
+      s.style.color = '#818cf8'; s.innerText = 'Validando credenciales...';
       try {
-        const res = await fetch(`${SAAS_API}/api/auth/login`, {
+        const res = await fetch(`${API}/api/auth/login`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
-            email: document.getElementById('login-email').value,
-            password: document.getElementById('login-password').value
+            email: document.getElementById('l-email').value,
+            password: document.getElementById('l-pass').value
           })
         });
-
         const data = await res.json();
-        if (!res.ok) throw new Error(data.detail || 'Error al iniciar sesión');
-
-        localStorage.setItem('clofovoz_token', data.access_token);
-        localStorage.setItem('clofovoz_user', JSON.stringify(data.usuario));
-        checkAuthSession();
-      } catch (err) {
-        statusEl.style.color = '#ef4444';
-        statusEl.innerText = err.message;
+        if(!res.ok) throw new Error(data.detail || 'Error al iniciar sesión');
+        localStorage.setItem('clofo_token', data.access_token);
+        localStorage.setItem('clofo_user', JSON.stringify(data.usuario));
+        sync();
+      } catch(err) {
+        s.style.color = '#ef4444'; s.innerText = err.message;
       }
     }
 
-    async function handleRegister(e) {
+    async function doReg(e) {
       e.preventDefault();
-      const statusEl = document.getElementById('auth-status');
-      statusEl.style.color = '#38bdf8';
-      statusEl.innerText = 'Creando cuenta en PostgreSQL...';
-
+      const s = document.getElementById('status');
+      s.style.color = '#818cf8'; s.innerText = 'Guardando usuario en base de datos...';
       try {
-        const res = await fetch(`${SAAS_API}/api/auth/register`, {
+        const res = await fetch(`${API}/api/auth/register`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
-            nombre: document.getElementById('reg-nombre').value,
-            email: document.getElementById('reg-email').value,
-            password: document.getElementById('reg-password').value,
-            plan: document.getElementById('reg-plan').value
+            nombre: document.getElementById('r-name').value,
+            email: document.getElementById('r-email').value,
+            password: document.getElementById('r-pass').value,
+            plan: document.getElementById('r-plan').value
           })
         });
-
         const data = await res.json();
-        if (!res.ok) throw new Error(data.detail || 'Error al registrarse');
-
-        localStorage.setItem('clofovoz_token', data.access_token);
-        localStorage.setItem('clofovoz_user', JSON.stringify(data.usuario));
-        checkAuthSession();
-      } catch (err) {
-        statusEl.style.color = '#ef4444';
-        statusEl.innerText = err.message;
+        if(!res.ok) throw new Error(data.detail || 'Error al registrar');
+        localStorage.setItem('clofo_token', data.access_token);
+        localStorage.setItem('clofo_user', JSON.stringify(data.usuario));
+        sync();
+      } catch(err) {
+        s.style.color = '#ef4444'; s.innerText = err.message;
       }
     }
 
-    function handleLogout() {
-      localStorage.removeItem('clofovoz_token');
-      localStorage.removeItem('clofovoz_user');
-      checkAuthSession();
+    function doLogout() {
+      localStorage.removeItem('clofo_token');
+      localStorage.removeItem('clofo_user');
+      sync();
     }
 
-    function checkAuthSession() {
-      const token = localStorage.getItem('clofovoz_token');
-      const user = JSON.parse(localStorage.getItem('clofovoz_user') || 'null');
-
-      if (token && user) {
-        document.getElementById('auth-forms').style.display = 'none';
-        document.getElementById('user-panel').style.display = 'block';
-        document.getElementById('user-display-name').innerText = user.nombre || user.email;
-        document.getElementById('user-display-plan').innerText = 'PLAN ' + (user.plan || 'FREE').toUpperCase();
+    function sync() {
+      const token = localStorage.getItem('clofo_token');
+      const user = JSON.parse(localStorage.getItem('clofo_user') || 'null');
+      if(token && user) {
+        document.getElementById('auth-box').style.display = 'none';
+        document.getElementById('user-box').style.display = 'block';
+        document.getElementById('u-name').innerText = user.nombre || user.email;
       } else {
-        document.getElementById('auth-forms').style.display = 'block';
-        document.getElementById('user-panel').style.display = 'none';
+        document.getElementById('auth-box').style.display = 'block';
+        document.getElementById('user-box').style.display = 'none';
       }
     }
-
-    // Comprobar sesión al entrar a la web
-    checkAuthSession();
+    sync();
   </script>
 </body>
 </html>
