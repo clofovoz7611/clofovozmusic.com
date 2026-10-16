@@ -1,193 +1,680 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clofovoz Music — Voz, Acústica & Audio SaaS</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clofovoz Studio - SaaS Audio Platform</title>
   <style>
-    :root {
-      --bg: #090d16;
-      --card-bg: #111827;
-      --accent: #6366f1;
-      --accent-hover: #4f46e5;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --border: #1e293b;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0b1120;
+      color: #f8fafc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 24px;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
-    header { border-bottom: 1px solid var(--border); background: rgba(9, 13, 22, 0.9); position: sticky; top: 0; z-index: 50; }
-    .nav { max-width: 1100px; margin: 0 auto; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
-    .logo { font-size: 1.25rem; font-weight: 800; color: #fff; }
-    .logo span { color: var(--accent); }
-    .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center; }
-    @media(max-width: 768px) { .container { grid-template-columns: 1fr; } }
-    .hero h1 { font-size: 2.4rem; font-weight: 800; line-height: 1.2; margin-bottom: 16px; }
-    .hero p { color: var(--muted); font-size: 1.05rem; margin-bottom: 24px; }
-    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-    .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
-    .tab-btn { flex: 1; padding: 10px; background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; cursor: pointer; font-weight: bold; }
-    .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-    .form-group { margin-bottom: 14px; }
-    label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 4px; }
-    input, select { width: 100%; padding: 10px; background: #030712; border: 1px solid var(--border); border-radius: 6px; color: #fff; outline: none; }
-    input:focus, select:focus { border-color: var(--accent); }
-    .btn { width: 100%; padding: 12px; background: var(--accent); color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 6px; }
-    .btn:hover { background: var(--accent-hover); }
-    #status { margin-top: 12px; font-size: 0.85rem; text-align: center; }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 28px;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+    }
+    h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+    p.desc { font-size: 13px; color: #94a3b8; margin-bottom: 20px; }
+    .btn-group { display: flex; gap: 10px; margin-bottom: 14px; }
+    button {
+      flex: 1;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    button:disabled { opacity: 0.35; cursor: not-allowed; }
+    .btn-record { background: #4f46e5; color: #ffffff; }
+    .btn-record:hover:not(:disabled) { background: #4338ca; }
+    .btn-stop { background: #e11d48; color: #ffffff; }
+    .btn-stop:hover:not(:disabled) { background: #be123c; }
+    .btn-send { background: #059669; color: #ffffff; }
+    .btn-send:hover:not(:disabled) { background: #047857; }
+    .btn-demucs { background: #0284c7; color: #ffffff; width: 100%; margin-top: 6px; }
+    .btn-demucs:hover:not(:disabled) { background: #0369a1; }
+    .btn-viral { background: linear-gradient(135deg, #6366f1, #a855f7); color: #ffffff; width: 100%; }
+    .btn-viral:hover:not(:disabled) { opacity: 0.95; }
+    #status {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-bottom: 16px;
+      min-height: 20px;
+    }
+    .result {
+      display: none;
+      background: #0f172a;
+      border: 1px solid #334155;
+      padding: 18px;
+      border-radius: 12px;
+      margin-top: 10px;
+    }
+    .badge {
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .VERDE { background: #10b981; color: #ffffff; }
+    .AMARILLO { background: #f59e0b; color: #ffffff; }
+    .ROJO { background: #f43f5e; color: #ffffff; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 12px 0;
+    }
+    .stat {
+      background: #1e293b;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid #2d3748;
+    }
+    .stat-label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 2px; }
+    .stat-val { font-size: 14px; font-weight: 700; color: #f1f5f9; }
+    .formants-box {
+      background: #1e293b;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #cbd5e1;
+      border: 1px solid #2d3748;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .spectrogram-wrap { margin: 14px 0; }
+    .spectrogram-wrap img {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      display: block;
+      margin-top: 6px;
+    }
+    .tips {
+      background: #1e293b;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #cbd5e1;
+      line-height: 1.4;
+      border-left: 3px solid #6366f1;
+    }
+    .error-box {
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid #f43f5e;
+      color: #fda4af;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+    .section-divider {
+      margin-top: 24px;
+      border-top: 1px solid #334155;
+      padding-top: 16px;
+    }
+    .ab-box {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+    .ab-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .ab-tab {
+      background: #1e293b;
+      color: #94a3b8;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid #334155;
+      cursor: pointer;
+    }
+    .ab-tab.active {
+      background: #38bdf8;
+      color: #0b1120;
+      border-color: #38bdf8;
+    }
+    .btn-download {
+      display: inline-block;
+      margin-top: 8px;
+      color: #38bdf8;
+      font-size: 12px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .btn-download:hover {
+      text-decoration: underline;
+    }
+    .clip-preview-wrap {
+      display: none;
+      text-align: center;
+      margin-top: 14px;
+      background: #0f172a;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+    }
+    .clip-preview-wrap video {
+      width: 220px;
+      height: 391px;
+      border-radius: 12px;
+      border: 2px solid #38bdf8;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+      background: #000;
+      display: block;
+      margin: 0 auto 10px auto;
+    }
   </style>
 </head>
 <body>
+  <div class="card">
+    <h2>Clofovoz Studio MVP</h2>
+    <p class="desc">Bioacústica, Potenciación Vocal con IA y Renderizado Viral 9:16.</p>
 
-  <header>
-    <div class="nav">
-      <div class="logo">CLOFOVOZ <span>MUSIC</span></div>
-      <div style="font-size: 0.85rem; color: var(--muted);">Plataforma Cloud Activa</div>
-    </div>
-  </header>
-
-  <main class="container">
-    <div class="hero">
-      <div style="display:inline-block; padding: 4px 12px; background: rgba(99,102,241,0.15); color: #818cf8; border-radius: 20px; font-size: 0.8rem; margin-bottom: 14px; font-weight: bold;">Ciencia Vocal & Producción de Audio</div>
-      <h1>El punto de encuentro entre la ciencia acústica y la música.</h1>
-      <p>Entrenamiento fisiológico para cantantes, consultoría de ergonomía vocal y producción de audio fundamentada en acústica de precisión.</p>
+    <!-- 1. Clofovoz Vocal Check -->
+    <div class="btn-group">
+      <button id="btnRecord" class="btn-record">Grabar</button>
+      <button id="btnStop" class="btn-stop" disabled>Detener</button>
+      <button id="btnSend" class="btn-send" disabled>Analizar</button>
     </div>
 
-    <!-- FORMULARIO DE ACCESO Y REGISTRO -->
-    <div class="card">
-      <div id="auth-box">
-        <div class="tabs">
-          <button id="b-login" class="tab-btn active" onclick="tab('login')">Ingresar</button>
-          <button id="b-reg" class="tab-btn" onclick="tab('reg')">Registrarse</button>
+    <div id="status">Presiona "Grabar" y sostén una emisión vocal de 5 a 10 segundos.</div>
+    <div id="output" class="result"></div>
+
+    <!-- 2. Estudio de Potenciación Vocal (Demucs + LUFS) -->
+    <div class="section-divider">
+      <h3 style="font-size: 15px; margin-bottom: 6px;">Estudio de Potenciación Vocal (Demucs + LUFS)</h3>
+      <p style="font-size: 12px; color: #94a3b8; margin-bottom: 10px;">Aislamiento neuronal, reducción de ruido y mastering a -14 LUFS.</p>
+      <input type="file" id="fileDemucs" accept="audio/*" style="font-size: 12px; color: #cbd5e1; margin-bottom: 8px; display: block; width: 100%;" />
+      <button id="btnDemucs" class="btn-demucs">Potenciar Pista Vocal</button>
+      <div id="demucsStatus" style="font-size: 12px; color: #94a3b8; margin-top: 10px; min-height: 18px;"></div>
+    </div>
+
+    <!-- 3. Clofovoz Viral Clip (Exportador Vertical 9:16) -->
+    <div class="section-divider">
+      <h3 style="font-size: 15px; margin-bottom: 6px;">Clofovoz Viral Clip (Redes Sociales 9:16)</h3>
+      <p style="font-size: 12px; color: #94a3b8; margin-bottom: 10px;">Genera un video vertical dinámico con espectro reactivo y métricas para TikTok, Reels o Shorts.</p>
+      
+      <button id="btnGenerateClip" class="btn-viral" disabled>Generar Viral Clip 9:16</button>
+      <div id="clipStatus" style="font-size: 12px; color: #94a3b8; margin-top: 8px; min-height: 18px;">Graba voz o potencia una pista para habilitar el generador de video.</div>
+
+      <div id="clipContainer" class="clip-preview-wrap">
+        <canvas id="viralCanvas" width="720" height="1280" style="display: none;"></canvas>
+        <video id="clipPreview" controls playsinline></video>
+        <div>
+          <a id="btnDownloadClip" class="btn-download" href="#" download="clofovoz_clip_9_16.webm">⬇ Descargar Video Vertical 9:16</a>
         </div>
-
-        <form id="f-login" onsubmit="doLogin(event)">
-          <div class="form-group">
-            <label>Correo Electrónico</label>
-            <input type="email" id="l-email" required placeholder="admin@clofovozmusic.com">
-          </div>
-          <div class="form-group">
-            <label>Contraseña</label>
-            <input type="password" id="l-pass" required placeholder="••••••••">
-          </div>
-          <button type="submit" class="btn">Entrar a la Plataforma</button>
-        </form>
-
-        <form id="f-reg" onsubmit="doReg(event)" style="display: none;">
-          <div class="form-group">
-            <label>Nombre o Proyecto</label>
-            <input type="text" id="r-name" required placeholder="Tu nombre">
-          </div>
-          <div class="form-group">
-            <label>Correo Electrónico</label>
-            <input type="email" id="r-email" required placeholder="correo@ejemplo.com">
-          </div>
-          <div class="form-group">
-            <label>Contraseña</label>
-            <input type="password" id="r-pass" required minlength="6" placeholder="Mínimo 6 caracteres">
-          </div>
-          <div class="form-group">
-            <label>Plan Inicial</label>
-            <select id="r-plan">
-              <option value="free">Plan Free (Prueba)</option>
-              <option value="creator">Plan Creator ($12/mes)</option>
-              <option value="pro">Plan Pro Studio ($29/mes)</option>
-            </select>
-          </div>
-          <button type="submit" class="btn" style="background:#10b981;">Crear mi Cuenta</button>
-        </form>
-
-        <div id="status"></div>
-      </div>
-
-      <div id="user-box" style="display: none; text-align: center; padding: 20px 0;">
-        <h3 style="color: #818cf8; margin-bottom: 8px;">¡Sesión Iniciada!</h3>
-        <p id="u-name" style="font-size: 1.1rem; font-weight: bold;"></p>
-        <p style="color: var(--muted); font-size: 0.85rem; margin: 8px 0 20px 0;">Tu cuenta está conectada en tiempo real a PostgreSQL en Render.</p>
-        <button onclick="doLogout()" class="btn" style="background: #ef4444;">Cerrar Sesión</button>
       </div>
     </div>
-  </main>
+
+    <!-- 4. Histórico Longitudinal -->
+    <div class="section-divider">
+      <h3 style="font-size: 15px; margin-bottom: 8px;">Evolución Vocal (Historial)</h3>
+      <div id="history-content" style="font-size: 12px; color: #94a3b8;">Cargando sesiones...</div>
+    </div>
+  </div>
 
   <script>
-    const API = "https://clofovozmusic-ai.onrender.com";
+    let audioContext = null;
+    let mediaStream = null;
+    let inputNode = null;
+    let processorNode = null;
+    let audioSamples = [];
+    let recordedWavBlob = null;
+    let isRecording = false;
 
-    function tab(type) {
-      const isLogin = type === 'login';
-      document.getElementById('f-login').style.display = isLogin ? 'block' : 'none';
-      document.getElementById('f-reg').style.display = isLogin ? 'none' : 'block';
-      document.getElementById('b-login').className = isLogin ? 'tab-btn active' : 'tab-btn';
-      document.getElementById('b-reg').className = !isLogin ? 'tab-btn active' : 'tab-btn';
-      document.getElementById('status').innerText = '';
+    // Referencias DOM
+    const btnRecord = document.getElementById('btnRecord');
+    const btnStop = document.getElementById('btnStop');
+    const btnSend = document.getElementById('btnSend');
+    const status = document.getElementById('status');
+    const output = document.getElementById('output');
+
+    const btnDemucs = document.getElementById('btnDemucs');
+    const fileDemucs = document.getElementById('fileDemucs');
+    const demucsStatus = document.getElementById('demucsStatus');
+
+    const btnGenerateClip = document.getElementById('btnGenerateClip');
+    const clipContainer = document.getElementById('clipContainer');
+    const viralCanvas = document.getElementById('viralCanvas');
+    const clipPreview = document.getElementById('clipPreview');
+    const btnDownloadClip = document.getElementById('btnDownloadClip');
+    const clipStatus = document.getElementById('clipStatus');
+
+    let currentClipAudioSource = null;
+    let currentClipMetrics = { pitch: '140 Hz', semaphore: 'VERDE', lufs: '-14 LUFS' };
+
+    function enableViralClipGenerator(audioSource, metrics = {}) {
+      currentClipAudioSource = audioSource;
+      currentClipMetrics = { ...currentClipMetrics, ...metrics };
+      btnGenerateClip.disabled = false;
+      clipStatus.innerText = 'Pista lista para compilar video vertical 9:16.';
     }
 
-    async function doLogin(e) {
-      e.preventDefault();
-      const s = document.getElementById('status');
-      s.style.color = '#818cf8'; s.innerText = 'Validando credenciales...';
+    const encodeWAV = (samples, sampleRate) => {
+      const buffer = new ArrayBuffer(44 + samples.length * 2);
+      const view = new DataView(buffer);
+      const writeString = (offset, string) => {
+        for (let i = 0; i < string.length; i++) view.setUint8(offset + i, string.charCodeAt(i));
+      };
+      writeString(0, 'RIFF');
+      view.setUint32(4, 36 + samples.length * 2, true);
+      writeString(8, 'WAVE');
+      writeString(12, 'fmt ');
+      view.setUint32(16, 16, true);
+      view.setUint16(20, 1, true);
+      view.setUint16(22, 1, true);
+      view.setUint32(24, sampleRate, true);
+      view.setUint32(28, sampleRate * 2, true);
+      view.setUint16(32, 2, true);
+      view.setUint16(34, 16, true);
+      writeString(36, 'data');
+      view.setUint32(40, samples.length * 2, true);
+
+      let offset = 44;
+      for (let i = 0; i < samples.length; i++, offset += 2) {
+        const s = Math.max(-1, Math.min(1, samples[i]));
+        view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+      }
+      return new Blob([view], { type: 'audio/wav' });
+    };
+
+    btnRecord.onclick = async () => {
+      audioSamples = [];
+      output.style.display = 'none';
       try {
-        const res = await fetch(`${API}/api/auth/login`, {
+        mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        inputNode = audioContext.createMediaStreamSource(mediaStream);
+        processorNode = audioContext.createScriptProcessor(4096, 1, 1);
+        processorNode.onaudioprocess = (e) => {
+          if (!isRecording) return;
+          audioSamples.push(new Float32Array(e.inputBuffer.getChannelData(0)));
+        };
+        inputNode.connect(processorNode);
+        processorNode.connect(audioContext.destination);
+
+        isRecording = true;
+        btnRecord.disabled = true;
+        btnStop.disabled = false;
+        btnSend.disabled = true;
+        status.innerText = 'Grabando... Sostén tu emisión vocal.';
+      } catch (err) {
+        status.innerText = 'Error al acceder al micrófono: ' + err.message;
+      }
+    };
+
+    btnStop.onclick = () => {
+      if (!isRecording) return;
+      isRecording = false;
+
+      const totalLength = audioSamples.reduce((acc, chunk) => acc + chunk.length, 0);
+      const mergedSamples = new Float32Array(totalLength);
+      let offset = 0;
+      for (const chunk of audioSamples) {
+        mergedSamples.set(chunk, offset);
+        offset += chunk.length;
+      }
+
+      recordedWavBlob = encodeWAV(mergedSamples, audioContext.sampleRate);
+      if (processorNode) processorNode.disconnect();
+      if (inputNode) inputNode.disconnect();
+      if (mediaStream) mediaStream.getTracks().forEach((track) => track.stop());
+      if (audioContext && audioContext.state !== 'closed') audioContext.close();
+
+      btnRecord.disabled = false;
+      btnStop.disabled = true;
+      btnSend.disabled = false;
+      status.innerText = 'Muestra lista para evaluación bioacústica.';
+
+      enableViralClipGenerator(URL.createObjectURL(recordedWavBlob), { lufs: 'Original' });
+    };
+
+    btnSend.onclick = async () => {
+      if (!recordedWavBlob) return;
+      status.innerText = 'Analizando bioacústica en Clofovoz AI Engine...';
+      btnSend.disabled = true;
+
+      const formData = new FormData();
+      formData.append('file', recordedWavBlob, 'vocal_check.wav');
+
+      try {
+        const res = await fetch('http://127.0.0.1:8000/api/v1/vocal-check/analyze', {
           method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            email: document.getElementById('l-email').value,
-            password: document.getElementById('l-pass').value
-          })
+          body: formData,
         });
         const data = await res.json();
-        if(!res.ok) throw new Error(data.detail || 'Error al iniciar sesión');
-        localStorage.setItem('clofo_token', data.access_token);
-        localStorage.setItem('clofo_user', JSON.stringify(data.usuario));
-        sync();
-      } catch(err) {
-        s.style.color = '#ef4444'; s.innerText = err.message;
-      }
-    }
+        if (!res.ok || !data.analysis) throw new Error(data.detail || JSON.stringify(data));
 
-    async function doReg(e) {
-      e.preventDefault();
-      const s = document.getElementById('status');
-      s.style.color = '#818cf8'; s.innerText = 'Guardando usuario en base de datos...';
+        const a = data.analysis;
+        output.style.display = 'block';
+        output.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <strong style="font-size: 15px;">Diagnóstico Vocal Integral</strong>
+            <span class="badge ${a.health_semaphore}">${a.health_semaphore}</span>
+          </div>
+          <div class="grid">
+            <div class="stat"><span class="stat-label">F0 (Tono)</span><span class="stat-val">${a.pitch_hz_mean} Hz</span></div>
+            <div class="stat"><span class="stat-label">Estabilidad</span><span class="stat-val">${a.stability_percentage}%</span></div>
+            <div class="stat"><span class="stat-label">Tensión</span><span class="stat-val">${a.tension_percentage}%</span></div>
+          </div>
+          <div class="grid">
+            <div class="stat"><span class="stat-label">Jitter</span><span class="stat-val">${a.jitter_percent !== undefined ? a.jitter_percent + '%' : 'N/A'}</span></div>
+            <div class="stat"><span class="stat-label">Shimmer</span><span class="stat-val">${a.shimmer_percent !== undefined ? a.shimmer_percent + '%' : 'N/A'}</span></div>
+            <div class="stat"><span class="stat-label">HNR</span><span class="stat-val">${a.hnr_db !== undefined ? a.hnr_db + ' dB' : 'N/A'}</span></div>
+          </div>
+          ${a.formants ? `<div class="formants-box"><span>Formantes:</span><span><b>F1:</b> ${a.formants.f1} Hz | <b>F2:</b> ${a.formants.f2} Hz \vert{} <b>F3:</b>${a.formants.f3} Hz</span></div>` : ''}
+          ${a.spectrogram_image ? `<div class="spectrogram-wrap"><span class="stat-label">Espectrograma</span><img src="${a.spectrogram_image}" alt="Espectrograma" /></div>` : ''}
+          <div class="tips"><strong style="display:block; margin-bottom:4px; color:#e2e8f0;">Recomendación:</strong>${a.diagnostic_tips}</div>
+        `;
+        status.innerText = 'Auditoría completada.';
+
+        enableViralClipGenerator(URL.createObjectURL(recordedWavBlob), {
+          pitch: `${a.pitch_hz_mean} Hz`,
+          semaphore: a.health_semaphore,
+          lufs: 'Original'
+        });
+
+        loadVocalTrends(1);
+      } catch (err) {
+        output.style.display = 'block';
+        output.innerHTML = `<div class="error-box"><b>Error:</b> ${err.message}</div>`;
+        status.innerText = 'No se pudo completar el análisis.';
+      } finally {
+        btnSend.disabled = false;
+      }
+    };
+
+    btnDemucs.onclick = async () => {
+      if (!fileDemucs.files[0]) {
+        demucsStatus.innerText = 'Selecciona un archivo de audio primero.';
+        return;
+      }
+
+      btnDemucs.disabled = true;
+      demucsStatus.innerText = 'Subiendo pista y encolando en Upstash Redis...';
+
+      const formData = new FormData();
+      formData.append('file', fileDemucs.files[0]);
+
       try {
-        const res = await fetch(`${API}/api/auth/register`, {
+        const res = await fetch('http://127.0.0.1:8000/api/v1/audio/demucs-separate', {
           method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            nombre: document.getElementById('r-name').value,
-            email: document.getElementById('r-email').value,
-            password: document.getElementById('r-pass').value,
-            plan: document.getElementById('r-plan').value
-          })
+          body: formData
         });
         const data = await res.json();
-        if(!res.ok) throw new Error(data.detail || 'Error al registrar');
-        localStorage.setItem('clofo_token', data.access_token);
-        localStorage.setItem('clofo_user', JSON.stringify(data.usuario));
-        sync();
-      } catch(err) {
-        s.style.color = '#ef4444'; s.innerText = err.message;
+        const taskId = data.task_id;
+
+        demucsStatus.innerText = `En proceso (ID: ${taskId}). Separando stems y calibrando a -14 LUFS...`;
+
+        const pollInterval = setInterval(async () => {
+          try {
+            const statusRes = await fetch(`http://127.0.0.1:8000/api/v1/audio/demucs-status/${taskId}`);
+            const statusData = await statusRes.json();
+
+            if (statusData.status === 'SUCCESS') {
+              clearInterval(pollInterval);
+              const urlMastered = `http://127.0.0.1:8000/api/v1/audio/download/${taskId}?track_type=mastered`;
+              const urlRaw = `http://127.0.0.1:8000/api/v1/audio/download/${taskId}?track_type=raw`;
+              const initialLufs = statusData.result.initial_lufs ?? 'N/A';
+              const finalLufs = statusData.result.final_lufs ?? -14.0;
+
+              demucsStatus.innerHTML = `
+                <span style="color: #10b981;"><b>Potenciación completada:</b> Calibrada a ${finalLufs} LUFS (Inicial: ${initialLufs} LUFS).</span>
+                <div class="ab-box">
+                  <div class="ab-tabs">
+                    <button class="ab-tab active" id="tabMastered">Pista Masterizada (-14 LUFS)</button>
+                    <button class="ab-tab" id="tabRaw">Pista Aislada Cruda</button>
+                  </div>
+                  <audio id="abAudioPlayer" controls style="width: 100%;" src="${urlMastered}"></audio>
+                  <div style="margin-top: 8px; display: flex; justify-content: space-between;">
+                    <a id="abDownloadLink" style="font-size: 12px; color: #38bdf8; text-decoration: none;" href="${urlMastered}" download="voz_potenciada_14lufs.wav">⬇ Descargar Masterizada</a>
+                  </div>
+                </div>
+              `;
+
+              const player = document.getElementById('abAudioPlayer');
+              const tabMastered = document.getElementById('tabMastered');
+              const tabRaw = document.getElementById('tabRaw');
+              const dlLink = document.getElementById('abDownloadLink');
+
+              tabMastered.onclick = () => {
+                const currentTime = player.currentTime;
+                player.src = urlMastered;
+                player.currentTime = currentTime;
+                player.play();
+                tabMastered.classList.add('active');
+                tabRaw.classList.remove('active');
+                dlLink.href = urlMastered;
+                dlLink.download = "voz_potenciada_14lufs.wav";
+                dlLink.innerText = "⬇ Descargar Masterizada";
+                enableViralClipGenerator(urlMastered, { lufs: '-14 LUFS' });
+              };
+
+              tabRaw.onclick = () => {
+                const currentTime = player.currentTime;
+                player.src = urlRaw;
+                player.currentTime = currentTime;
+                player.play();
+                tabRaw.classList.add('active');
+                tabMastered.classList.remove('active');
+                dlLink.href = urlRaw;
+                dlLink.download = "voz_aislada_raw.wav";
+                dlLink.innerText = "⬇ Descargar Cruda";
+                enableViralClipGenerator(urlRaw, { lufs: 'Raw' });
+              };
+
+              enableViralClipGenerator(urlMastered, { lufs: '-14 LUFS' });
+              btnDemucs.disabled = false;
+            } else if (statusData.status === 'FAILURE') {
+              clearInterval(pollInterval);
+              demucsStatus.innerHTML = `<span style="color: #f43f5e;"><b>Error:</b> ${statusData.error || 'Fallo durante el procesamiento'}</span>`;
+              btnDemucs.disabled = false;
+            } else {
+              demucsStatus.innerText = `Estado: ${statusData.status}... Procesando señal en CPU.`;
+            }
+          } catch (pollErr) {
+            clearInterval(pollInterval);
+            demucsStatus.innerText = 'Error al monitorear tarea: ' + pollErr.message;
+            btnDemucs.disabled = false;
+          }
+        }, 2500);
+
+      } catch (err) {
+        demucsStatus.innerText = 'Error en el envío: ' + err.message;
+        btnDemucs.disabled = false;
+      }
+    };
+
+    // Renderizador Clofovoz Viral Clip 9:16 (100% Client-Side Canvas & MediaRecorder)
+    btnGenerateClip.onclick = async () => {
+      if (!currentClipAudioSource) return;
+
+      btnGenerateClip.disabled = true;
+      clipStatus.innerText = 'Renderizando clip vertical 9:16 en el navegador...';
+      clipContainer.style.display = 'block';
+
+      const audio = new Audio();
+      audio.crossOrigin = 'anonymous';
+      audio.src = currentClipAudioSource;
+
+      const actx = new (window.AudioContext || window.webkitAudioContext)();
+      const source = actx.createMediaElementSource(audio);
+      const analyser = actx.createAnalyser();
+      analyser.fftSize = 256;
+      source.connect(analyser);
+      analyser.connect(actx.destination);
+
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      const ctx = viralCanvas.getContext('2d');
+      const canvasStream = viralCanvas.captureStream(30);
+
+      const dest = actx.createMediaStreamDestination();
+      source.connect(dest);
+
+      const combinedTracks = [...canvasStream.getVideoTracks(), ...dest.stream.getAudioTracks()];
+      const combinedStream = new MediaStream(combinedTracks);
+
+      const mimeType = MediaRecorder.isTypeSupported('video/webm; codecs=vp9,opus')
+        ? 'video/webm; codecs=vp9,opus'
+        : 'video/webm';
+
+      const recorder = new MediaRecorder(combinedStream, { mimeType });
+      const recordedChunks = [];
+
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) recordedChunks.push(e.data);
+      };
+
+      recorder.onstop = () => {
+        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+        const videoUrl = URL.createObjectURL(blob);
+        clipPreview.src = videoUrl;
+        btnDownloadClip.href = videoUrl;
+        clipStatus.innerText = 'Clip 9:16 generado con éxito listo para descarga.';
+        btnGenerateClip.disabled = false;
+        actx.close();
+      };
+
+      recorder.start();
+      await audio.play();
+
+      function drawFrame() {
+        if (audio.paused || audio.ended) {
+          if (recorder.state === 'recording') recorder.stop();
+          return;
+        }
+
+        requestAnimationFrame(drawFrame);
+        analyser.getByteFrequencyData(dataArray);
+
+        // Fondo 9:16 (720x1280) Gradiente Tecnológico
+        const bgGrad = ctx.createLinearGradient(0, 0, 0, 1280);
+        bgGrad.addColorStop(0, '#060d19');
+        bgGrad.addColorStop(0.5, '#0f172a');
+        bgGrad.addColorStop(1, '#0284c7');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, 720, 1280);
+
+        // Encabezado
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 38px system-ui';
+        ctx.textAlign = 'center';
+        ctx.fillText('CLOFOVOZ STUDIO', 360, 200);
+
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = '600 22px system-ui';
+        ctx.fillText('Potenciación Vocal & Bioacústica IA', 360, 245);
+
+        // Espectro Radial de Onda Dinámica
+        const centerX = 360;
+        const centerY = 640;
+        const baseRadius = 130;
+
+        ctx.beginPath();
+        for (let i = 0; i < bufferLength; i++) {
+          const angle = (i / bufferLength) * Math.PI * 2;
+          const amplitude = (dataArray[i] / 255) * 85;
+          const r = baseRadius + amplitude;
+          const x = centerX + r * Math.cos(angle);
+          const y = centerY + r * Math.sin(angle);
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 6;
+        ctx.shadowColor = '#0284c7';
+        ctx.shadowBlur = 18;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // Anillo interior con tono
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 28px system-ui';
+        ctx.fillText(currentClipMetrics.pitch, centerX, centerY - 10);
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '16px system-ui';
+        ctx.fillText('Frecuencia Fundamental', centerX, centerY + 22);
+
+        // Badge de Calidad & LUFS
+        ctx.fillStyle = '#10b981';
+        ctx.beginPath();
+        ctx.roundRect(220, 940, 280, 56, 28);
+        ctx.fill();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 22px system-ui';
+        ctx.fillText(`MASTERING: ${currentClipMetrics.lufs}`, 360, 975);
+
+        // Marca de agua Clofovoz
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+        ctx.font = '18px system-ui';
+        ctx.fillText('clofovozmusic.com', 360, 1200);
+      }
+
+      drawFrame();
+    };
+
+    // Historial
+    async function loadVocalTrends(userId = 1) {
+      try {
+        const res = await fetch(`http://127.0.0.1:8000/api/v1/vocal-check/history/${userId}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const historyBox = document.getElementById('history-content');
+        if (!historyBox) return;
+
+        if (!data.records || data.records.length === 0) {
+          historyBox.innerText = 'No hay sesiones registradas.';
+          return;
+        }
+
+        historyBox.innerHTML = `
+          <p style="margin-bottom: 8px;"><b>Sesiones:</b> ${data.total_sessions} | <b>F0 Medio:</b> ${data.avg_f0} Hz | <b>Estabilidad:</b> ${data.avg_stability}%</p>
+          <div style="max-height: 140px; overflow-y: auto;">
+            ${data.records.map(r => `
+              <div style="background:#0f172a; padding:6px 10px; margin-bottom:4px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+                <span>${new Date(r.created_at).toLocaleDateString()} -${r.pitch_hz_mean} Hz</span>
+                <span class="badge ${r.health_semaphore}">${r.health_semaphore}</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } catch (err) {
+        console.error('Error al cargar historial:', err);
       }
     }
 
-    function doLogout() {
-      localStorage.removeItem('clofo_token');
-      localStorage.removeItem('clofo_user');
-      sync();
-    }
-
-    function sync() {
-      const token = localStorage.getItem('clofo_token');
-      const user = JSON.parse(localStorage.getItem('clofo_user') || 'null');
-      if(token && user) {
-        document.getElementById('auth-box').style.display = 'none';
-        document.getElementById('user-box').style.display = 'block';
-        document.getElementById('u-name').innerText = user.nombre || user.email;
-      } else {
-        document.getElementById('auth-box').style.display = 'block';
-        document.getElementById('user-box').style.display = 'none';
-      }
-    }
-    sync();
+    window.addEventListener('DOMContentLoaded', () => {
+      loadVocalTrends(1);
+    });
   </script>
 </body>
 </html>
